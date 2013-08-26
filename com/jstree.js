@@ -14,7 +14,7 @@ requirejs.config({
 // define module (component)
 define('jstree', ['jquery_jstree'], function() {
 	return {
-		template: "<div id='{{id}}'><content></content></div>",
+    template: "<div id='{{id}}'><content></content></div>",
 		script: function() {
 			var $oriEle = this.$originEle,
 					$ele = this.$ele,
@@ -44,7 +44,7 @@ define('jstree', ['jquery_jstree'], function() {
 				return doc;
 			};
 
-			// deepTracing is boolean, true means deepTracing, not beginning.
+			// deepTracing is boolean, true means deep tracing, not first level node.
 			var _xmlAdapter = function(content, deepTracing, parentId) {
 				if (!deepTracing) {
 					_tempXmlDoc = $.parseXML("<root/>");
@@ -89,50 +89,68 @@ define('jstree', ['jquery_jstree'], function() {
 						plugins.push('ui');
 					}
 				}
-
-				// Beginning of content is not <ul>, means not html data
-
-					try {
-						var jsonData = JSON.parse(content);
-						// json data zone if parse success
-						plugins.push('json_data');
+        
+				try {
+					var jsonData = JSON.parse(content);
+					// json data zone if parse success
+          // organize the json_data config
+          var jsonConfig = {};
+          
+          if ($oriEle.attr('lazy') === 'true') {
+            var ajax = {};
+            
+            ajax.url = $oriEle.attr('ajax-url');
+            ajax.data = function(node) {
+              return {
+                id: node.attr ? node.attr("id") : 0
+              };
+            }
+            ajax.success = function(resData) {
+              // assume that response data is json string
+              return resData.i.trim() !== '' ? JSON.parse(resData.i) : '';
+            }
+            
+            jsonConfig.ajax = ajax;
+          } else {
+            jsonConfig.data = jsonData;
+          }
+          
+					plugins.push('json_data');
+					$ele.jstree({
+            "json_data" : jsonConfig,
+						"plugins" : plugins,
+						"themes" : theme
+					});
+				} catch(error) {
+					if (isHtmlData(content)) {
+						// html data zone
+						plugins.push('html_data');
 						$ele.jstree({
-							"json_data" : {
-								"data" : jsonData
+							"core" : {
+								"initially_open" : ['root']
 							},
 							"plugins" : plugins,
 							"themes" : theme
 						});
-					} catch(error) {
-						if (isHtmlData(content)) {
-							// html data zone
-							plugins.push('html_data');
-							$ele.jstree({
-								"core" : {
-									"initially_open" : ['root']
-								},
-								"plugins" : plugins,
-								"themes" : theme
-							});
-						} else {
-							// assume it's xml if parse error
-							// xml data zone
-							// transfer xml to _tempXmlDoc variable
-							// todo: maybe has better way ...
-							_xmlAdapter(content, false);
-							var xmlData = (new XMLSerializer()).serializeToString(_tempXmlDoc),
-								xmlStr = xmlData.split(' xmlns="http://www.w3.org/1999/xhtml"').join('');
+					} else {
+						// assume it's xml if parse error
+						// xml data zone
+						// transfer xml to _tempXmlDoc variable
+						// todo: maybe has better way ...
+						_xmlAdapter(content, false);
+						var xmlData = (new XMLSerializer()).serializeToString(_tempXmlDoc),
+							xmlStr = xmlData.split(' xmlns="http://www.w3.org/1999/xhtml"').join('');
 
-							plugins.push('xml_data');
-							$ele.jstree({
-								"xml_data" : {
-									"data" : xmlStr
-								},
-								"plugins" : plugins,
-								"themes" : theme
-							});
-						}
+						plugins.push('xml_data');
+						$ele.jstree({
+							"xml_data" : {
+								"data" : xmlStr
+							},
+							"plugins" : plugins,
+							"themes" : theme
+						});
 					}
+				}
 
 			};
 		}

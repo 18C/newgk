@@ -56,6 +56,42 @@
         }]
     </jstree>
     <br>
+    <h3>JSON Content jsTree(lazy loading, will ignore content data if turn on lazy attr.)</h3>
+    <jstree id="json_tree_lazy" lazy="true" ajax-url="/event/put/x/gksrData.getJsonData.go">
+        [{
+            "data" : "A node",
+            "metadata" : { "id" : 23 },
+            "children" : [ "Child 1", "A Child 2" ]
+        },
+        {
+            "attr" : { "id" : "li.node.id1" },
+            "data" : {
+                "title" : "Long format demo",
+                "attr" : { "href" : "#" }
+            }
+        }]
+    </jstree>
+    <div style="font-size:9px">
+      Backend Simple Logic:
+      <div>
+      	public String getJsonData(String info) { <br>
+          String jsonData = "";<br>
+          if (info.equals("id=0")) {<br>
+            jsonData = "[" +
+              "{ \"data\" : \"A node\", \"children\" : [ { \"data\" : \"Only child\", \"attr\" : { \"id\" : \"test1\" }, \"state\" : \"closed\" } ], \"state\" : \"open\" }," +
+              "\"Ajax node\"" +
+            "]";<br>
+          } else if (info.equals("id=test1")) {<br>
+            jsonData = "[" +
+              "\"Ajax node1\"," +
+              "\"Ajax node2\"" +
+            "]";<br>
+          }<br>
+          return jsonData;<br>
+        }
+      </div>
+    </div>
+    <br>
     <h3>CheckBox jsTree</h3>
     <input id='get_checked' type='button' value='Get checked' />
     <jstree id="checkbox_tree" checkbox='true'>
