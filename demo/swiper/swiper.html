@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" media="screen" href="../../lib/swiper/idangerous.swiper.css">
+    <style>
+      .swiper-container, .swiper-slide {
+        width: 640px;
+        height: 300px;
+      }
+      .pagination{
+        position:absolute;
+        left:0;
+        text-align:center;
+        top:310px;
+        width:100%;
+      }
+      .swiper-pagination-switch{
+        display:inline-block;
+        width:10px;
+        height:10px;
+        border-radius:10px;
+        background:#999;
+        box-shadow:0px 1px 2px #555 inset;
+        margin:0 3px;
+        cursor:pointer;
+      }
+      .swiper-active-switch{
+        background:#fff;
+      }
+    </style>
+  </head>
+  <body gk-app>
+    <swiper id='swiper'>
+      <swiper-slide>
+        <img src="images/slider1-1.png">
+      </swiper-slide>
+      <swiper-slide>
+        <img src="images/slider1-2.png">
+      </swiper-slide>
+      <swiper-slide>
+        <div>
+          <p>Slide with HTML</p>
+          <input type='button' value='Button'>
+        </div>
+      </swiper-slide>
+    </swiper>
+    <div class="pagination"></div>
+
+    <script src='../../lib/utils/require.js'></script>
+    <script src='../../lib/jquery/jquery-1.10.1.js'></script>
+    <script src='../../lib/gk/jquery.gk-0.5.js'></script>
+    <script gk-tags='swiper,swiper-slide' src='../../gk-loader.js'></script>
+    <script type="text/javascript">
+      $(document).on('gkComponentsReady', function (w) {
+
+      });
+    </script>
+  </body>
+</html>
