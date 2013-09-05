@@ -12,6 +12,12 @@
     </p>
     <slider id='slider' vertical='true' max='50' min='5' value='10' step='3'></slider>
 
+    <p>
+      <label for='amount2'>Volume:</label>
+      <input id='amount2' type='text' style='border:0'>
+    </p>
+    <slider id='slider2' vertical='true' max='100' min='1' value='10' step='1'></slider>
+
     <script src='../../lib/utils/require.js'></script>
     <script src='../../lib/jquery/jquery-1.10.1.js'></script>
     <script src='../../lib/gk/jquery.gk-0.5.js'></script>
@@ -20,6 +26,10 @@
       $(document).on('gkComponentsReady', function (w) {
     	  $('#slider').on('slidechange', function(event, ui) {
           $('#amount').val(ui.value);
+        });
+
+        $('#slider2').on('slide', function(event, ui) {
+          $('#amount2').val(ui.value);
         });
       });
     </script>
