@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>    
+  </head>
+  <body gk-app>
+    <highcharts id='chart' titleText='2012~2013歷史股價' style="min-width: 310px; height: 400px; margin: 0 auto">
+      <highcharts-legend align='center' verticalAlign='bottom' layout='horizontal'></highcharts-legend>
+      <highcharts-xaxis titleText='Date' type='datetime'></highcharts-xaxis>
+      <highcharts-yaxis titleText='Close'></highcharts-yaxis>
+      <highcharts-yaxis titleText='Close2' opposite='true'></highcharts-yaxis>
+    </highcharts>
+
+    <script src='../../lib/utils/require.js'></script>
+    <script src='../../lib/jquery/jquery-1.10.1.js'></script>
+    <script src='../../lib/gk/jquery.gk-0.5.js'></script>
+    <script gk-tags='highcharts,highcharts-legend,highcharts-xaxis,highcharts-yaxis' src='../../gk-loader.js'></script>
+    <script type="text/javascript">
+      $(document).on('gkComponentsReady', function (w) {
+
+        var $chart = $('#chart');
+        var callback = function(series) {
+          $chart.gk('addSeries', series);
+        }
+
+        get('GOOG', '/demo/highcharts/goog.csv', callback);
+        get('AAPL', '/demo/highcharts/aapl.csv', callback);
+        get('VTI', '/demo/highcharts/vti.csv', function(series) {
+          series.yAxis = 1;
+          $chart.gk('addSeries', series);
+        });
+        get('2498', '/demo/highcharts/2498.csv', function(series) {
+          series.yAxis = 1;
+          $chart.gk('addSeries', series);
+        });
+
+        function get(name, url, callback) {
+          var series = {
+            name : name,
+            data : []
+          };
+
+          $.get(url, function(csv) {
+            var datas = csv.split('\n');
+            $.each(datas.reverse(), function(index, item) {
+              if (index > 0 && index < datas.length - 1) {
+                var data = item.split(',');
+                series.data.push([Date.parse(data[0]), parseFloat(data[4])]);
+              }
+            });
+            if (typeof(callback) === 'function') {
+              callback(series);
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
