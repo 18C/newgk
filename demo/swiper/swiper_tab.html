@@ -76,7 +76,7 @@
       <a href="#" style="margin:0 17px">Tab 2</a>
       <a href="#">Tab 3</a>
     </div>
-    <swiper id='swiper'>
+    <swiper id='swiper' grabCursor='true'>
       <swiper-slide>
         <div class='content-slide'>
           <h1>Tab1</h1>
@@ -101,7 +101,7 @@
     <script type="text/javascript">
       $(document).on('gkComponentsReady', function (w) {
 
-        $('#swiper').on('slideChangeStart', function(event, swiper) {
+        $('#swiper').on('onSlideChangeStart', function(event, swiper) {
           $(".tabs .active").removeClass('active');
           $(".tabs a").eq(swiper.activeIndex).addClass('active');
         });

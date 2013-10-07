@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" media="screen" href="../../lib/swiper/idangerous.swiper.css">
+    <style>
+      body,html {
+        height: 100%;
+      }
+      body {
+        background: #222;
+        color: #fff;
+      }
+      #swiper_nav span {
+        padding: 0 50px;
+        cursor: pointer;
+        border-right: 1px solid #000;
+        border-left: 1px solid #333;
+        display: block;
+        line-height: 40px;
+      }
+      #swiper_nav span:active {
+        background: #000;
+      }
+      #swiper {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body gk-app>    
+    <swiper id='swiper_nav' slidesPerView='auto' freeMode='true' freeModeFluid='true'>
+      <swiper-slide>
+        <span>Tab1</span>
+      </swiper-slide>
+      <swiper-slide>
+        <span>Tab2</span>
+      </swiper-slide>
+      <swiper-slide>
+        <span>Tab3</span>
+      </swiper-slide>
+      <swiper-slide>
+        <span>Tab4</span>
+      </swiper-slide>
+    </swiper>
+    <swiper id='swiper'>
+      <swiper-slide>
+        <div class='content-slide'>
+          <h1>Tab1 Content</h1>
+        </div>
+      </swiper-slide>
+      <swiper-slide>
+        <div class='content-slide'>
+          <h1>Tab2 Content</h1>
+        </div>
+      </swiper-slide>
+      <swiper-slide>
+        <div class='content-slide'>
+          <h1>Tab3 Content</h1>
+        </div>
+      </swiper-slide>
+      <swiper-slide>
+        <div class='content-slide'>
+          <h1>Tab4 Content</h1>
+        </div>
+      </swiper-slide>
+    </swiper>
+
+    <script src='../../lib/utils/require.js'></script>
+    <script src='../../lib/jquery/jquery-1.10.1.js'></script>
+    <script src='../../lib/gk/jquery.gk-0.5.js'></script>
+    <script gk-tags='swiper,swiper-slide' src='../../gk-loader.js'></script>
+    <script type="text/javascript">
+      $(document).on('gkComponentsReady', function (w) {
+        $nav = $('#swiper_nav');
+        $swiper = $('#swiper');
+
+        $nav.on('onSlideClick', function(event, nav) {
+          $swiper.gk().swiper.swipeTo(nav.clickedSlideIndex);
+        });
+      });
+    </script>
+  </body>
+</html>
